@@ -5,7 +5,18 @@ import Link from "next/link";
 export const revalidate = 3600;
 
 export default function StoresPage() {
-  const urls = productUrls as string[];
+  type ProductConfig =
+    | string
+    | {
+        url: string;
+        title?: string;
+        image?: string;
+        description?: string;
+        store?: string;
+      };
+
+  const items = productUrls as ProductConfig[];
+  const urls = items.map((it) => (typeof it === "string" ? it : it.url));
   const stores = Array.from(new Set(urls.map((url) => extractHostname(url)))).sort();
 
   return (
