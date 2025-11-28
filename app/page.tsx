@@ -35,7 +35,7 @@ console.log(metaList,'meta')
   return (
     <main className="bg-[#f5f5f5]">
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <ProductListClient products={metaList} showStoreLinks />
+        <ProductListClient products={metaList} />
 
         <footer className="mt-8 text-xs text-gray-500 border-t border-gray-200 pt-4">
          <p>
