@@ -4,22 +4,33 @@ import ProductListClient from "@/app/components/ProductListClient";
 import { notFound } from "next/navigation";
 
 export const revalidate = 3600;
-
 type Params = {
   params: {
     store: string;
   };
 };
 
+type ProductConfig =
+  | string
+  | {
+      url: string;
+      title?: string;
+      image?: string;
+      description?: string;
+      store?: string;
+    };
+
 export async function generateStaticParams() {
-  const urls = productUrls as string[];
+  const items = productUrls as ProductConfig[];
+  const urls = items.map((it) => (typeof it === "string" ? it : it.url));
   const stores = Array.from(new Set(urls.map((url) => extractHostname(url))));
   return stores.map((store) => ({ store }));
 }
 
 export default async function StorePage({ params }: Params) {
   const { store } = params;
-  const urls = productUrls as string[];
+  const items = productUrls as ProductConfig[];
+  const urls = items.map((it) => (typeof it === "string" ? it : it.url));
   const metaList = await Promise.all(urls.map((url) => fetchProductMeta(url)));
   const filtered = metaList.filter((p) => p.store === store);
 
@@ -32,8 +43,6 @@ export default async function StorePage({ params }: Params) {
       <div className="max-w-5xl mx-auto px-4 py-8">
         <ProductListClient
           products={filtered}
-          initialStore={store}
-          showStoreLinks={false}
         />
 
         <footer className="mt-8 text-xs text-gray-500 border-t border-gray-200 pt-4">
