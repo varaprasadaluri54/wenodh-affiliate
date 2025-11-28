@@ -12,8 +12,7 @@ type ProductConfig =
       description?: string;
     };
 export default async function HomePage() {
-  const urls = productsRaw as string[];
- const items = productsRaw as ProductConfig[];
+  const items = productsRaw as ProductConfig[];
 
   const metaList = await Promise.all(
     items.map(async (item) => {
